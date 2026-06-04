@@ -1,7 +1,6 @@
-# tban-cat
+# Salary Cat (Yuexin Miao)
 
-# 我真的特别爱你 月薪猫 小猫
-
+# 我真的特别爱你 月薪喵 小猫 月薪猫
 It renders `cat.gif` / `cat.GIF` in the terminal, loops the animation, and plays
 `music.mp3` when available.
 
