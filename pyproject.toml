@@ -23,6 +23,11 @@ classifiers = [
     "Topic :: Terminals",
 ]
 
+[project.optional-dependencies]
+build = [
+    "pyinstaller>=6.0.0",
+]
+
 [project.scripts]
 tban-cat = "main:run"
 

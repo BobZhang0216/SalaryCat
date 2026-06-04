@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, Sequence
 
 from PIL import Image, ImageSequence
 
@@ -13,16 +13,20 @@ class GifFrame:
     duration: float
 
 
-def resolve_gif_path(path: str | Path = "cat.gif") -> Path:
+def resolve_gif_path(
+    path: str | Path = "cat.gif",
+    extra_dirs: Sequence[Path] = (),
+) -> Path:
     requested = Path(path)
     if requested.exists():
         return requested
 
     if requested.name == "cat.gif":
-        for candidate in ("cat.gif", "cat.GIF", "CAT.GIF"):
-            candidate_path = Path(candidate)
-            if candidate_path.exists():
-                return candidate_path
+        for directory in (Path.cwd(), *extra_dirs):
+            for candidate in ("cat.gif", "cat.GIF", "CAT.GIF"):
+                candidate_path = directory / candidate
+                if candidate_path.exists():
+                    return candidate_path
 
     raise FileNotFoundError(f"GIF file not found: {requested}")
 

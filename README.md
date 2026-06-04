@@ -5,7 +5,51 @@
 It renders `cat.gif` / `cat.GIF` in the terminal, loops the animation, and plays
 `music.mp3` when available.
 
-## Requirements
+## Download without Python
+
+Users do not need to install Python if they download the standalone binaries
+from GitHub Releases:
+
+https://github.com/Einswen/tban-cat/releases
+
+### macOS
+
+1. Download one file from the latest release:
+   - Apple Silicon Macs: `tban-cat-macos-arm64`
+   - Intel Macs: `tban-cat-macos-intel`
+2. Open Terminal in the download folder.
+3. Rename it or run it directly. Example for Apple Silicon:
+
+```bash
+chmod +x ./tban-cat-macos-arm64
+./tban-cat-macos-arm64
+```
+
+If macOS Gatekeeper blocks it, run:
+
+```bash
+xattr -d com.apple.quarantine ./tban-cat-macos-arm64
+./tban-cat-macos-arm64
+```
+
+### Windows
+
+1. Download `tban-cat-windows.exe` from the latest release.
+2. Open Windows Terminal or PowerShell in the download folder.
+3. Run:
+
+```powershell
+.\tban-cat-windows.exe
+```
+
+If Windows SmartScreen warns about an unknown app, choose "More info" and then
+"Run anyway".
+
+The standalone binaries include the bundled `cat.GIF` and `music.mp3`. You can
+still place your own `cat.gif` and `music.mp3` in the same folder to override
+them.
+
+## Requirements for Python install
 
 - Python 3.10+
 - A modern terminal with ANSI TrueColor support:
@@ -26,7 +70,7 @@ Audio playback uses system tools:
 
 If no supported audio player is found, the animation still runs.
 
-## Install
+## Install with Python
 
 From this project directory:
 
@@ -92,6 +136,20 @@ Run directly without installing:
 ```bash
 python3 -m pip install -r requirements.txt
 python3 main.py
+```
+
+Build a standalone binary locally:
+
+```bash
+python3 -m pip install ".[build]"
+python3 -m PyInstaller --onefile --name tban-cat --add-data "cat.GIF:." --add-data "music.mp3:." main.py
+```
+
+On Windows, use semicolons in `--add-data`:
+
+```powershell
+py -m pip install ".[build]"
+py -m PyInstaller --onefile --name tban-cat --add-data "cat.GIF;." --add-data "music.mp3;." main.py
 ```
 
 Check syntax:

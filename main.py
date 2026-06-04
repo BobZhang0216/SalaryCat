@@ -144,9 +144,27 @@ def sleep_until(target_time: float) -> None:
         time.sleep(min(remaining, 0.02))
 
 
+def bundled_asset_dir() -> Path:
+    return Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parent))
+
+
+def resolve_optional_asset(path: str | Path, extra_dirs: tuple[Path, ...]) -> Path:
+    requested = Path(path)
+    if requested.exists():
+        return requested
+
+    for directory in (Path.cwd(), *extra_dirs):
+        candidate = directory / requested.name
+        if candidate.exists():
+            return candidate
+
+    return requested
+
+
 def run() -> int:
     args = parse_args()
-    gif_path = resolve_gif_path(Path(args.gif))
+    asset_dir = bundled_asset_dir()
+    gif_path = resolve_gif_path(Path(args.gif), extra_dirs=(asset_dir,))
     frames = load_gif(gif_path)
     if not args.no_trim:
         frames = crop_frames_to_content(frames)
@@ -161,7 +179,8 @@ def run() -> int:
     frame_index = 0
     next_frame_at = time.perf_counter()
     timestamps: deque[float] = deque(maxlen=120)
-    audio = None if args.no_music else AudioPlayer(args.music)
+    music_path = resolve_optional_asset(args.music, extra_dirs=(asset_dir,))
+    audio = None if args.no_music else AudioPlayer(music_path)
 
     try:
         if audio is not None:
